@@ -15,11 +15,8 @@ void clean();
 
 int main(void){ 
     // Настройка кнопки на срез
-    EIMSK = (1<<INT2);
-    EICRA = (1<<ISC21);
-    // настройка прерываний энкодера 
-    EIMSK = (1<<INT1);
-    EICRA = (1<<ISC11);
+    EIMSK = (1<<INT2)|(1<<INT1);
+    EICRA = (1<<ISC21)|(1<<ISC11);
     // настройка портов выхода для семисегментника
     DDRA = (1<<1)|(1<<2)|(1<<3)|(1<<4)|(1<<5); // это про номер индикаторов
     DDRC = 0xFF; // это про  светодиоды
@@ -36,26 +33,26 @@ void showNumber(){
     digit();
     bool isFirstDigit = false;
     for(uint8_t i = 1; i <= 4; i++){
-        DDRA = (1 << (i+1));
+        PORTA = (1 << (i+1));
         if(!isFirstDigit){ //если еще не нашли первый элемент
             if(digitKeys[i]){ //и если текущий элемент не ноль
                 isFirstDigit = true; // говорим что нашли первый элемент
-                DDRD = segments[digitKeys[i]]; // выводим его на экран
+                PORTD = segments[digitKeys[i]]; // выводим его на экран
                 _delay_ms(10);
-                DDRA = 0; 
+                PORTA = 0; 
                 _delay_ms(5);
-                DDRA = (1 << (i));  
-                DDRD = segments[digitKeys[11]];
+                PORTA = (1 << (i));  
+                PORTD = segments[11];
             }
             else{                               // и если текущий элемент ноль 
-                DDRD = segments[11];            // гасим все светодиоды
+                PORTD = segments[11];            // гасим все светодиоды
             }
         }else{                                  // если уже нашли первый элемент
-            DDRD = segments[digitKeys[i-1]];    // просто выводим согласно hashMap
+            PORTD = segments[digitKeys[i-1]];    // просто выводим согласно hashMap
             // _delay_ms(10);                  
         }
         _delay_ms(10);
-        DDRA = 0;    
+        PORTA = 0;    
     }
 }
 void digit(){
@@ -80,20 +77,20 @@ void digit(){
 }
 void allForNull(){
     for(uint8_t i = 4; i >= 1; i--){
-        DDRA = (1 << i);
-        DDRD = 0;
+        PORTA = (1 << i);
+        PORTD = 0;
         _delay_ms(10);
-        DDRA = 0;
+        PORTA = 0;
     }
-    DDRA = (1 << 5);
-    DDRD = segments[0];
+    PORTA = (1 << 5);
+    PORTD = segments[0];
 }
 void clean(){
      for(uint8_t i = 5; i >= 1; i--){
-        DDRA = (1 << i);
-        DDRD = 0;
+        PORTA = (1 << i);
+        PORTD = 0;
         _delay_ms(10);
-        DDRA = 0;
+        PORTA = 0;
     }
 }
 
