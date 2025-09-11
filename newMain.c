@@ -6,18 +6,18 @@ const uint8_t key2digit[]  = {0x3F, 0x06, 0x5B, 0x4F,
 0x66, 0x6D,0x7D, 0x07, 0x7F, 0x6F, 0b0100000, 0};
 uint8_t angleInArr[] = {11, 11, 11, 11, 11};
 int16_t angle = 0;
-#define SS_IND(IND_N, BITS){
-    PORTA = (1 << IND_N);
-    _delay_us(5);
-    PORTD = BITS;
-    _delay_us(5);
-    PORTA = 0;
-    _delay_us(5);
-}
+// #define SS_IND(IND_N, BITS){
+//     PORTA = (1 << IND_N);
+//     _delay_us(5);
+//     PORTD = BITS;
+//     _delay_us(5);
+//     PORTA = 0;
+//     _delay_us(5);
+// }
 #define SS_IND_NEW(IND_N, DIGIT){
     PORTA = (1 << IND_N);
     _delay_us(5);
-    PORTD = key2digit[DIGIT];
+    PORTС = key2digit[DIGIT];
     _delay_us(5);
     PORTA = 0;
     _delay_us(5);
@@ -118,4 +118,5 @@ ISR (INT1_vect){
             else 
                 angle++;
     }
+    STOP_FLAG = false;
 }
