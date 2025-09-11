@@ -14,6 +14,14 @@ int16_t angle = 0;
     PORTA = 0;
     _delay_us(5);
 }
+#define SS_IND_NEW(IND_N, DIGIT){
+    PORTA = (1 << IND_N);
+    _delay_us(5);
+    PORTD = key2digit[DIGIT];
+    _delay_us(5);
+    PORTA = 0;
+    _delay_us(5);
+}
 bool STOP_FLAG = true;
 void resetForNull();
 void num2digitArr();
@@ -46,14 +54,14 @@ void showNumber(){
         if(!isFirstDigit){ //если еще не нашли первый элемент
             if(ssKeys[i]){ //и если текущий элемент не ноль
                 isFirstDigit = true; // говорим что нашли первый элемент
-                SS_IND(ind_n, key2digit[angleInArr[i]]);
-                SS_IND(ind_n - 1, key2digit[10]);
+                SS_IND_NEW(ind_n, angleInArr[i]);
+                SS_IND_NEW(ind_n - 1, angleInArr[10]);
             }
             else{                               // и если текущий элемент ноль 
-                SS_IND(ind_n, 0);        // гасим все светодиоды
+                SS_IND_NEW(ind_n, 11);        // гасим все светодиоды
             }
         }else{                                  // если уже нашли первый элемент
-            SS_IND(ind_n, key2digit[angleInArr[i]]);    // просто выводим согласно hashMap
+            SS_IND_NEW(ind_n, angleInArr[i]);    // просто выводим согласно hashMap
             // _delay_ms(10);                  
         }
         _delay_us(10);
@@ -85,13 +93,13 @@ void num2digitArr(){
 
 void resetForNull(){
     for(uint8_t i = 1; i <= 4; i++){
-        SS_IND(i, key2digit[10]);
+        SS_IND_NEW(i, 11);
     }
-    SS_IND(i, key2digit[0]);
+    SS_IND_NEW(i, 0);
 }
 
 ISR (INT2_vect){
-    allForNull();
+    resetForNull();
     angle = 0;
 }
 
