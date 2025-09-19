@@ -29,7 +29,7 @@ int main(void)
     DDRD = 0;
     resetForNull();
     uint8_t cnt = 0;
-    //sei();
+    sei();
     while (1)
     {
         // cnt+=1;
